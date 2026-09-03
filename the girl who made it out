@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sales Catalog</title>
+
+<style>
+:root {
+    --accent: #c9a227;
+    --text: #171717;
+    --panel: #ffffff;
+    --bg: #f4f4f4;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================
+   HEADER & NAVIGATION
+========================= */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #ddd;
+    padding: 14px 4%;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 1.25rem;
+    margin-right: auto;
+}
+
+.nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.nav button,
+.btn {
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    background: #eeeeee;
+}
+
+.nav button.active,
+.primary {
+    background: var(--accent);
+    color: white;
+}
+
+.owner-badge {
+    font-size: .75rem;
+    padding: 5px 8px;
+    border-radius: 99px;
+    background: #222;
+    color: white;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 28px 4%;
+}
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero {
+    min-height: 230px;
+    border-radius: 18px;
+    padding: 40px;
+    display: flex;
+    align-items: end;
+    background: linear-gradient(135deg, #111, #444);
+    color: white;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 28px;
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    margin: 0 0 8px;
+}
+
+.hero p {
+    margin: 0;
+    opacity: .9;
+}
+
+/* =========================
+   SEARCH & TOOLBARS
+========================= */
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.toolbar input,
+.toolbar select {
+    padding: 12px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    min-width: 200px;
+}
+
+/* =========================
+   PRODUCT GRID
+========================= */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--panel);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 16px #00000012;
+}
+
+.card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    background: #ddd;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.price {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--accent);
+}
+
+.muted {
+    color: #777;
+    font-size: .9rem;
+}
+
+/* =========================
+   PANELS
+========================= */
+
+.panel {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 3px 16px #00000010;
+    margin-bottom: 20px;
+}
+
+/* =========================
+   FORMS
+========================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.form-grid .full {
+    grid-column: 1 / -1;
+}
+
+label {
+    display: block;
+    font-weight: 700;
+    font-size: .9rem;
+    margin-bottom: 5px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.notice {
+    padding: 12px;
+    border-radius: 8px;
+    background: #fff7d6;
+    margin: 10px 0;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+    header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .logo {
+        margin-right: 0;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid .full {
+        grid-column: auto;
+    }
+
+    .hero {
+        padding: 25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     WEBSITE HEADER
+========================= -->
+
+<header>
+
+    <div class="logo" id="siteLogo">
+        Sales Catalog
+    </div>
+
+    <span id="ownerBadge"
+          class="owner-badge hidden">
+        OWNER MODE
+    </span>
+
+    <nav class="nav">
+
+        <button data-view="store"
+                class="active">
+            Store
+        </button>
+
+        <button data-view="search">
+            Search / Availability
+        </button>
+
+        <button data-view="owner"
+                id="ownerNav"
+                class="hidden">
+            Owner
+        </button>
+
+        <button data-view="settings"
+                id="settingsNav"
+                class="hidden">
+            Settings
+        </button>
+
+        <button id="loginBtn">
+            Owner Login
+        </button>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+<!-- =========================
+     CUSTOMER STORE VIEW
+========================= -->
+
+<section id="storeView">
+
+    <div class="hero" id="hero">
+
+        <div>
+
+            <h1 id="heroTitle">
+                Your Store
+            </h1>
+
+            <p id="heroSubtitle">
+                Browse available items for sale.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Product Filters -->
+
+    <div class="toolbar">
+
+        <select id="categoryFilter">
+
+            <option value="">
+                All categories
+            </option>
+
+        </select>
+
+
+        <select id="availabilityFilter">
+
+            <option value="">
+                All availability
+            </option>
+
+            <option value="Available">
+                Available
+            </option>
+
+            <option value="Sold Out">
+                Sold Out
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- Product Catalog -->
+
+    <div id="catalog"
+         class="grid">
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     SEARCH PAGE
+========================= -->
+
+<section id="searchView"
+         class="hidden">
+
+    <div class="panel">
+
+        <h2>
+            Search & Availability
+        </h2>
+
+        <p class="muted">
+            Search products by name, category,
+            description, or availability.
+        </p>
+
+
+        <div class="toolbar">
+
+            <input id="searchInput"
+                   placeholder="Search products...">
+
+
+            <select id="searchCategory">
+
+                <option value="">
+                    All categories
+                </option>
+
+            </select>
+
+
+            <select id="searchAvailability">
+
+                <option value="">
+                    Any availability
+                </option>
+
+                <option value="Available">
+                    Available
+                </option>
+
+                <option value="Sold Out">
+                    Sold Out
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!-- Search Results -->
+
+    <div id="searchResults"
+         class="grid">
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     OWNER DASHBOARD
+========================= -->
+
+<section id="ownerView"
+         class="hidden">
+
+
+    <div class="panel">
+
+        <h2>
+            Owner Dashboard
+        </h2>
+
+        <p>
+            Add products, upload images,
+            edit details and control sale pricing.
+            Changes are saved in this browser.
+        </p>
+
+    </div>
+
+
+
+    <!-- Product Form -->
+
+    <div class="panel">
+
+        <h3 id="formTitle">
+            Add Product
+        </h3>
+
+
+        <form id="productForm">
+
+
+            <div class="form-grid">
+
+
+                <div>
+
+                    <label>
+                        Product Name
+                    </label>
+
+                    <input id="pName"
+                           required>
+
+                </div>
+
+
+
+                <div>
+
+                    <label>
+                        Category
+                    </label>
+
+                    <input id="pCategory"
+                           required>
+
+                </div>
+
+
+
+                <div>
+
+                    <label>
+                        Sale Price
+                    </label>
+
+                    <input id="pPrice"
+                           type="number"
+                           min="0"
+                           step=".01"
+                           required>
+
+                </div>
+
+
+
+                <div>
+
+                    <label>
+                        Original Price
+                    </label>
+
+                    <input id="pOriginal"
+                           type="number"
+                           min="0"
+                           step=".01">
+
+                </div>
+
+
+
+                <div>
+
+                    <label>
+                        Availability
+                    </label>
+
+                    <select id="pAvailability">
+
+                        <option>
+                            Available
+                        </option>
+
+                        <option>
+                            Sold Out
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div>
+
+                    <label>
+                        Product Image
+                    </label>
+
+                    <input id="pImage"
+                           type="file"
+                           accept="image/*">
+
+                </div>
+
+
+
+                <div class="full">
+
+                    <label>
+                        Product Description / Details
+                    </label>
+
+                    <textarea id="pDescription"></textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="actions">
+
+                <button class="btn primary"
+                        type="submit">
+
+                    Save Product
+
+                </button>
+
+
+                <button class="btn"
+                        type="button"
+                        id="cancelEdit">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- Owner Product Management -->
+
+    <div id="ownerProducts"
+         class="grid">
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     OWNER SETTINGS
+========================= -->
+
+<section id="settingsView"
+         class="hidden">
+
+
+    <div class="panel">
+
+        <h2>
+            Owner Settings
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <div>
+
+                <label>
+                    Store Name
+                </label>
+
+                <input id="sName">
+
+            </div>
+
+
+
+            <div>
+
+                <label>
+                    Hero Title
+                </label>
+
+                <input id="sTitle">
+
+            </div>
+
+
+
+            <div class="full">
+
+                <label>
+                    Hero Subtitle
+                </label>
+
+                <input id="sSubtitle">
+
+            </div>
+
+
+
+            <div>
+
+                <label>
+                    Background Color
+                </label>
+
+                <input id="sColor"
+                       type="color">
+
+            </div>
+
+
+
+            <div>
+
+                <label>
+                    Hero Background Image
+                </label>
+
+                <input id="sImage"
+                       type="file"
+                       accept="image/*">
+
+            </div>
+
+
+        </div>
+
+
+        <div class="actions">
+
+            <button id="saveSettings"
+                    class="btn primary">
+
+                Save Settings
+
+            </button>
+
+
+            <button id="resetBackground"
+                    class="btn">
+
+                Use Color Only
+
+            </button>
+
+        </div>
+
+
+        <div class="notice">
+
+            Owner settings are hidden from
+            normal visitors. For a production
+            website, authentication should be
+            moved to a secure server.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+
+/* =========================
+   DEFAULT PRODUCTS
+========================= */
+
+const defaultProducts = [
+
+    {
+        id: 1,
+
+        name: "Sample Product",
+
+        category: "Featured",
+
+        price: 29.99,
+
+        original: 39.99,
+
+        availability: "Available",
+
+        description:
+            "Replace this sample with your own product.",
+
+        image:
+            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80"
+    }
+
+];
+
+
+/* =========================
+   LOAD SAVED DATA
+========================= */
+
+let products =
+    JSON.parse(
+        localStorage.getItem("products") || "null"
+    ) || defaultProducts;
+
+
+let settings =
+    JSON.parse(
+        localStorage.getItem("settings") || "null"
+    ) || {
+
+        name: "Sales Catalog",
+
+        title: "Your Store",
+
+        subtitle:
+            "Browse available items for sale.",
+
+        color: "#111111",
+
+        image: ""
+    };
+
+
+let owner = false;
+
+let editId = null;
+
+
+/* =========================
+   SHORTCUT FUNCTION
+========================= */
+
+const $ = id =>
+    document.getElementById(id);
+
+
+/* =========================
+   SAVE DATA
+========================= */
+
+function save() {
+
+    localStorage.setItem(
+        "products",
+        JSON.stringify(products)
+    );
+
+
+    localStorage.setItem(
+        "settings",
+        JSON.stringify(settings)
+    );
+
+}
+
+
+/* =========================
+   FORMAT MONEY
+========================= */
+
+function money(number) {
+
+    return "$" +
+        Number(number).toFixed(2);
+
+}
+
+
+/* =========================
+   PROTECT HTML TEXT
+========================= */
+
+function escapeHtml(text) {
+
+    return String(text ?? "")
+
+        .replace(/[&<>"']/g, character => ({
+
+            "&": "&amp;",
+
+            "<": "&lt;",
+
+            ">": "&gt;",
+
+            '"': "&quot;",
+
+            "'": "&#039;"
+
+        }[character]));
+
+}
+
+
+/* =========================
+   CREATE PRODUCT CARD
+========================= */
+
+function card(product, admin = false) {
+
+    return `
+
+    <article class="card">
+
+        <img
+            src="${product.image || ""}"
+            alt="${escapeHtml(product.name)}"
+        >
+
+
+        <div class="card-body">
+
+
+            <div class="muted">
+
+                ${escapeHtml(product.category)}
+
+                ·
+
+                ${escapeHtml(product.availability)}
+
+            </div>
+
+
+            <h3>
+
+                ${escapeHtml(product.name)}
+
+            </h3>
+
+
+            <div class="price">
+
+                ${money(product.price)}
+
+            </div>
+
+
+            ${
+                product.original
+
+                ?
+
+                `
+                <div class="muted">
+
+                    Regular
+                    ${money(product.original)}
+
+                </div>
+                `
+
+                :
+
+                ""
+            }
+
+
+            <p>
+
+                ${escapeHtml(
+                    product.description || ""
+                )}
+
+            </p>
+
+
+            ${
+                admin
+
+                ?
+
+                `
+                <div class="actions">
+
+                    <button
+                        class="btn"
+                        onclick="editProduct(${product.id})"
+                    >
+
+                        Edit
+
+                    </button>
+
+
+                    <button
+                        class="btn"
+                        onclick="deleteProduct(${product.id})"
+                    >
+
+                        Delete
+
+                    </button>
+
+                </div>
+                `
+
+                :
+
+                ""
+            }
+
+
+        </div>
+
+    </article>
+
+    `;
+
+}
+
+
+/* =========================
+   RENDER WEBSITE
+========================= */
+
+function render() {
+
+
+    /* Update Store Information */
+
+    $("siteLogo").textContent =
+        settings.name;
+
+
+    $("heroTitle").textContent =
+        settings.title;
+
+
+    $("heroSubtitle").textContent =
+        settings.subtitle;
+
+
+
+    /* Update Background */
+
+    $("hero").style.backgroundColor =
+        settings.color;
+
+
+    $("hero").style.backgroundImage =
+        settings.image
+
+        ?
+
+        `url("${settings.image}")`
+
+        :
+
+        `linear-gradient(
+            135deg,
+            ${settings.color},
+            #444
+        )`;
+
+
+
+    /* Create Categories */
+
+    const categories = [
+
+        ...new Set(
+
+            products.map(
+                product => product.category
+            )
+
+        )
+
+    ].sort();
+
+
+
+    ["categoryFilter", "searchCategory"]
+
+        .forEach(id => {
+
+            $(id).innerHTML =
+
+                '<option value="">All categories</option>' +
+
+                categories.map(category =>
+
+                    `<option>
+
+                        ${escapeHtml(category)}
+
+                    </option>`
+
+                ).join("");
+
+        });
+
+
+
+    /* Filter Store Products */
+
+    const filteredProducts =
+
+        products.filter(product =>
+
+            (
+
+                !$("categoryFilter").value
+
+                ||
+
+                product.category ===
+                $("categoryFilter").value
+
+            )
+
+            &&
+
+            (
+
+                !$("availabilityFilter").value
+
+                ||
+
+                product.availability ===
+                $("availabilityFilter").value
+
+            )
+
+        );
+
+
+
+    $("catalog").innerHTML =
+
+        filteredProducts
+
+            .map(product => card(product))
+
+            .join("")
+
+        ||
+
+        "<p>No products found.</p>";
+
+
+
+    /* Render Owner Products */
+
+    $("ownerProducts").innerHTML =
+
+        products
+
+            .map(product =>
+                card(product, true)
+            )
+
+            .join("");
+
+
+
+    doSearch();
+
+}
+
+
+/* =========================
+   SEARCH PRODUCTS
+========================= */
+
+function doSearch() {
+
+
+    const searchText =
+        $("searchInput").value
+            .toLowerCase();
+
+
+    const category =
+        $("searchCategory").value;
+
+
+    const availability =
+        $("searchAvailability").value;
+
+
+
+    const results =
+
+        products.filter(product =>
+
+            (
+
+                !searchText
+
+                ||
+
+                [
+
+                    product.name,
+
+                    product.category,
+
+                    product.description
+
+                ]
+
+                .join(" ")
+
+                .toLowerCase()
+
+                .includes(searchText)
+
+            )
+
+            &&
+
+            (
+
+                !category
+
+                ||
+
+                product.category === category
+
+            )
+
+            &&
+
+            (
+
+                !availability
+
+                ||
+
+                product.availability ===
+                availability
+
+            )
+
+        );
+
+
+
+    $("searchResults").innerHTML =
+
+        results
+
+            .map(product => card(product))
+
+            .join("")
+
+        ||
+
+        "<p>No matching products.</p>";
+
+}
+
+
+/* =========================
+   SHOW PAGE
+========================= */
+
+function show(view) {
+
+
+    document
+        .querySelectorAll("main > section")
+
+        .forEach(section =>
+
+            section.classList.add("hidden")
+
+        );
+
+
+    $(view + "View")
+
+        .classList.remove("hidden");
+
+
+
+    document
+
+        .querySelectorAll(
+            ".nav button[data-view]"
+        )
+
+        .forEach(button =>
+
+            button.classList.toggle(
+
+                "active",
+
+                button.dataset.view === view
+
+            )
+
+        );
+
+}
+
+
+/* =========================
+   OWNER LOGIN
+========================= */
+
+function ownerLogin() {
+
+
+    /* Logout */
+
+    if (owner) {
+
+        owner = false;
+
+
+        [
+            "ownerNav",
+            "settingsNav",
+            "ownerBadge"
+        ]
+
+        .forEach(id =>
+
+            $(id).classList.add("hidden")
+
+        );
+
+
+        $("loginBtn").textContent =
+            "Owner Login";
+
+
+        show("store");
+
+        return;
+
+    }
+
+
+
+    /* Login */
+
+    const password =
+
+        prompt(
+            "Enter owner password:"
+        );
+
+
+    if (password === "admin123") {
+
+
+        owner = true;
+
+
+        [
+            "ownerNav",
+            "settingsNav",
+            "ownerBadge"
+        ]
+
+        .forEach(id =>
+
+            $(id).classList.remove("hidden")
+
+        );
+
+
+        $("loginBtn").textContent =
+            "Logout";
+
+
+        show("owner");
+
+    }
+
+    else {
+
+        alert(
+            "Incorrect password."
+        );
+
+    }
+
+}
+
+
+$("loginBtn").onclick =
+    ownerLogin;
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+document
+
+    .querySelectorAll(
+        ".nav button[data-view]"
+    )
+
+    .forEach(button => {
+
+        button.onclick = () => {
+
+
+            if (
+
+                (
+
+                    button.dataset.view ===
+                    "owner"
+
+                    ||
+
+                    button.dataset.view ===
+                    "settings"
+
+                )
+
+                &&
+
+                !owner
+
+            ) {
+
+                return;
+
+            }
+
+
+            show(
+                button.dataset.view
+            );
+
+        };
+
+    });
+
+
+/* =========================
+   STORE FILTERS
+========================= */
+
+[
+    "categoryFilter",
+    "availabilityFilter"
+]
+
+.forEach(id =>
+
+    $(id).onchange =
+        render
+
+);
+
+
+/* =========================
+   SEARCH EVENTS
+========================= */
+
+[
+    "searchInput",
+    "searchCategory",
+    "searchAvailability"
+]
+
+.forEach(id =>
+
+    $(id).oninput =
+        doSearch
+
+);
+
+
+/* =========================
+   ADD OR EDIT PRODUCT
+========================= */
+
+$("productForm").onsubmit = event => {
+
+
+    event.preventDefault();
+
+
+    const file =
+        $("pImage").files[0];
+
+
+
+    const finish = image => {
+
+
+        const productData = {
+
+            id:
+                editId || Date.now(),
+
+
+            name:
+                $("pName").value,
+
+
+            category:
+                $("pCategory").value,
+
+
+            price:
+                +$("pPrice").value,
+
+
+            original:
+
+                $("pOriginal").value
+
+                ?
+
+                +$("pOriginal").value
+
+                :
+
+                null,
+
+
+            availability:
+                $("pAvailability").value,
+
+
+            description:
+                $("pDescription").value,
+
+
+            image:
+
+                image
+
+                ||
+
+                (
+
+                    editId
+
+                    ?
+
+                    products.find(
+                        product =>
+                            product.id === editId
+                    )?.image
+
+                    :
+
+                    ""
+
+                )
+
+        };
+
+
+
+        /* Update Existing Product */
+
+        if (editId) {
+
+            products =
+
+                products.map(product =>
+
+                    product.id === editId
+
+                    ?
+
+                    productData
+
+                    :
+
+                    product
+
+                );
+
+        }
+
+
+        /* Add New Product */
+
+        else {
+
+            products.push(
+                productData
+            );
+
+        }
+
+
+
+        editId = null;
+
+
+        $("productForm").reset();
+
+
+        $("formTitle").textContent =
+            "Add Product";
+
+
+        save();
+
+
+        render();
+
+    };
+
+
+
+    /* Read Uploaded Image */
+
+    if (file) {
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload = () =>
+
+            finish(
+                reader.result
+            );
+
+
+        reader.readAsDataURL(file);
+
+    }
+
+
+    else {
+
+        finish();
+
+    }
+
+};
+
+
+/* =========================
+   EDIT PRODUCT
+========================= */
+
+window.editProduct = id => {
+
+
+    const product =
+
+        products.find(
+            item => item.id === id
+        );
+
+
+    editId = id;
+
+
+    $("formTitle").textContent =
+        "Edit Product";
+
+
+    $("pName").value =
+        product.name;
+
+
+    $("pCategory").value =
+        product.category;
+
+
+    $("pPrice").value =
+        product.price;
+
+
+    $("pOriginal").value =
+        product.original || "";
+
+
+    $("pAvailability").value =
+        product.availability;
+
+
+    $("pDescription").value =
+        product.description || "";
+
+
+    show("owner");
+
+};
+
+
+/* =========================
+   DELETE PRODUCT
+========================= */
+
+window.deleteProduct = id => {
+
+
+    if (
+
+        confirm(
+            "Delete this product?"
+        )
+
+    ) {
+
+
+        products =
+
+            products.filter(
+                product =>
+                    product.id !== id
+            );
+
+
+        save();
+
+
+        render();
+
+    }
+
+};
+
+
+/* =========================
+   CANCEL EDIT
+========================= */
+
+$("cancelEdit").onclick = () => {
+
+
+    $("productForm").reset();
+
+
+    editId = null;
+
+
+    $("formTitle").textContent =
+        "Add Product";
+
+};
+
+
+/* =========================
+   LOAD SETTINGS
+========================= */
+
+$("sName").value =
+    settings.name;
+
+
+$("sTitle").value =
+    settings.title;
+
+
+$("sSubtitle").value =
+    settings.subtitle;
+
+
+$("sColor").value =
+    settings.color;
+
+
+/* =========================
+   SAVE SETTINGS
+========================= */
+
+$("saveSettings").onclick = () => {
+
+
+    settings.name =
+
+        $("sName").value
+
+        ||
+
+        "Sales Catalog";
+
+
+    settings.title =
+
+        $("sTitle").value
+
+        ||
+
+        "Your Store";
+
+
+    settings.subtitle =
+
+        $("sSubtitle").value
+
+        ||
+
+        "Browse available items for sale.";
+
+
+    settings.color =
+        $("sColor").value;
+
+
+    const file =
+        $("sImage").files[0];
+
+
+
+    const finish = () => {
+
+
+        save();
+
+
+        render();
+
+
+        alert(
+            "Settings saved."
+        );
+
+    };
+
+
+
+    if (file) {
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload = () => {
+
+
+            settings.image =
+                reader.result;
+
+
+            finish();
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    }
+
+
+    else {
+
+        finish();
+
+    }
+
+};
+
+
+/* =========================
+   REMOVE BACKGROUND IMAGE
+========================= */
+
+$("resetBackground").onclick = () => {
+
+
+    settings.image = "";
+
+
+    save();
+
+
+    render();
+
+
+    alert(
+        "Background image removed."
+    );
+
+};
+
+
+/* =========================
+   INITIAL WEBSITE RENDER
+========================= */
+
+render();
+
+
+</script>
+
+</body>
+</html>
